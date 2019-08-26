@@ -22,3 +22,7 @@ The default device the script looks for is ``/dev/sr0``. If your drive has a dif
 The script will open the dvd drive and ask you to insert a disk. Just lay the disk in the tray and press enter.
 
 If you're done ripping, type anything at this screen and press enter to quit. Or just press Ctrl+c.
+
+## Unreadable disks
+
+When the ripper finds a disk is damaged it will give the user an error message, delete the ISO and eject the disk. You can either clean the disk and try again or insert a different disk.
