@@ -25,4 +25,4 @@ If you're done ripping, type anything at this screen and press enter to quit. Or
 
 ## Unreadable disks
 
-When the ripper finds a disk is damaged it will give the user an error message, delete the ISO and eject the disk. You can either clean the disk and try again or insert a different disk.
+When the ripper finds a disk is not fully readable it will give the user an error message, delete the ISO and eject the disk. You can either clean the disk and try again or insert a different disk. If cleaning doesn't work, the disk is likely damaged.
