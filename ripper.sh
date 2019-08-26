@@ -15,6 +15,7 @@ if [ -z $DRIVE ]; then
   DRIVE="/dev/sr0"
 fi
 
+TIMEOUT=60
 
 while true; do
   eject
@@ -29,11 +30,16 @@ while true; do
   while [ -z "$(df ${DRIVE}|grep ${DRIVE})" ] ; do
     sleep 1
     TIMEWAITED=$((TIMEWAITED+1))
-    if [ "$TIMEWAITED" -gt 60 ]; then
+    if [ "$TIMEWAITED" -gt "${TIMEOUT}" ]; then
       echo "Couldn't read disk"
-      exit 1
+      FAILED=1
+      break
     fi
   done
+
+  if [ "$FAILED" ]; then
+    continue
+  fi
 
   MOUNTPOINT="$(df /dev/sr0|tail -1| awk '{ print $6 }')"
   echo "Disk mounted at ${MOUNTPOINT}"
