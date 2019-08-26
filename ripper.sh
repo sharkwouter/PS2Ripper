@@ -29,7 +29,7 @@ while true; do
   while [ -z "$(df ${DRIVE}|grep ${DRIVE})" ] ; do
     sleep 1
     TIMEWAITED=$((TIMEWAITED+1))
-    if [ "$TIMEWAITED" -gt 20 ]; then
+    if [ "$TIMEWAITED" -gt 60 ]; then
       echo "Couldn't read disk"
       exit 1
     fi
