@@ -42,15 +42,15 @@ while true; do
     continue
   fi
 
-  MOUNTPOINT="$(df /dev/sr0|tail -1| awk '{ print $6 }')"
+  MOUNTPOINT="$(df /dev/sr0|tail -1|tr -s ' '|cut -d ' ' -f 6-)"
   echo "Disk mounted at ${MOUNTPOINT}"
-  if [ ! -f ${MOUNTPOINT}/SYSTEM.CNF ] && [ ! -f ${MOUNTPOINT}/system.cnf ]; then
+  if [ ! -f "${MOUNTPOINT}/SYSTEM.CNF" ] && [ ! -f "${MOUNTPOINT}/system.cnf" ]; then
     echo "Couldn't find ${MOUNTPOINT}/SYSTEM.CNF, this is probably not a PS2 game"
     continue
   fi
 
   VOLNAME="$(volname ${DRIVE}| sed 's/[ ^t]*$//')"
-  CODENAME="$(find ${MOUNTPOINT} -maxdepth 1 -iname '*SYSTEM.CNF'|head -1|xargs cat|head -1| cut -f2 -d'\'|cut -f1 -d';'|tr -d '.')"
+  CODENAME=$(find "${MOUNTPOINT}/" -maxdepth 1 -iname '*SYSTEM.CNF' -print0 -quit|xargs -0 cat|head -1| cut -f2 -d'\'|cut -f1 -d';'|tr -d '.')
   if [ -z ${VOLNAME} ] || [ "${VOLNAME}" == "${CODENAME}" ]; then
     ISONAME="${CODENAME}.iso"
   else
