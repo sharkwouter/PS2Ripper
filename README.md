@@ -1,6 +1,6 @@
 # PS2Ripper
 
-A simple bash script to rip PS2 games in bulk.
+A bash script for ripping PS2 game disks back to back
 
 ## How to start
 
