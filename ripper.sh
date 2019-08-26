@@ -25,8 +25,14 @@ while true; do
   fi
 
   # close the drive and wait for the drive to be mounted
+  TIMEWAITED=0
   while [ -z "$(df ${DRIVE}|grep ${DRIVE})" ] ; do
     sleep 1
+    TIMEWAITED=$((TIMEWAITED+1))
+    if [ "$TIMEWAITED" -gt 20 ]; then
+      echo "Couldn't read disk"
+      exit 1
+    fi
   done
 
   MOUNTPOINT="$(df /dev/sr0|tail -1| awk '{ print $6 }')"
@@ -40,7 +46,7 @@ while true; do
   fi
   echo "Ripping game as ${ISONAME}"
   dd if="${DRIVE}" of="${DEST}/${ISONAME}"
-  if [ ! -z $? ]; then
+  if [ ! $? -eq 0 ]; then
     echo "Read not fully readable, please clean the disk and try again"
     rm ${DEST}/${ISONAME}
   fi
