@@ -45,7 +45,7 @@ while true; do
   echo "Disk mounted at ${MOUNTPOINT}"
   VOLNAME="$(volname ${DRIVE}| sed 's/[ ^t]*$//')"
   CODENAME="$(find ${MOUNTPOINT} -maxdepth 1 -iname '*SYSTEM.CNF'|head -1|xargs cat|head -1| cut -f2 -d'\'|cut -f1 -d';'|tr -d '.')"
-  if [ -z ${VOLNAME} ]; then
+  if [ -z ${VOLNAME} ] || [ "${VOLNAME}" == "${CODENAME}" ]; then
     ISONAME="${CODENAME}.iso"
   else
     ISONAME="${CODENAME}-${VOLNAME}.iso"
