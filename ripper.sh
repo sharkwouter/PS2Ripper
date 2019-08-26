@@ -27,22 +27,28 @@ while true; do
 
   # close the drive and wait for the drive to be mounted
   TIMEWAITED=0
+  FAILED=0
   while [ -z "$(df ${DRIVE}|grep ${DRIVE})" ] ; do
     sleep 1
     TIMEWAITED=$((TIMEWAITED+1))
     if [ "$TIMEWAITED" -gt "${TIMEOUT}" ]; then
-      echo "Couldn't read disk"
       FAILED=1
       break
     fi
   done
 
-  if [ "$FAILED" ]; then
+  if [ $FAILED -eq 1 ]; then
+    echo "Couldn't read disk"
     continue
   fi
 
   MOUNTPOINT="$(df /dev/sr0|tail -1| awk '{ print $6 }')"
   echo "Disk mounted at ${MOUNTPOINT}"
+  if [ ! -f ${MOUNTPOINT}/SYSTEM.CNF ] && [ ! -f ${MOUNTPOINT}/system.cnf ]; then
+    echo "Couldn't find ${MOUNTPOINT}/SYSTEM.CNF, this is probably not a PS2 game"
+    continue
+  fi
+
   VOLNAME="$(volname ${DRIVE}| sed 's/[ ^t]*$//')"
   CODENAME="$(find ${MOUNTPOINT} -maxdepth 1 -iname '*SYSTEM.CNF'|head -1|xargs cat|head -1| cut -f2 -d'\'|cut -f1 -d';'|tr -d '.')"
   if [ -z ${VOLNAME} ] || [ "${VOLNAME}" == "${CODENAME}" ]; then
